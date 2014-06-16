@@ -68,7 +68,6 @@ r.on('searchBroadcasters', function() {
 	}
 	
 	ga('send', 'event', 'search', r.get('broadcaster'));
-	
 	r.set('error', null);
 	r.set('searching', true);
 	r.set('logo', null)
@@ -122,7 +121,6 @@ r.on('searchVideos', function() {
 		return;
 	}
 	sVideos = []
-	ga('send', 'event', 'search videos', r.get('q'));
 	r.get('allVideos').forEach(function(e) {
 		q = r.get('q').toLowerCase();
 		if (e['title'].toLowerCase().indexOf(q) > -1 || e['description'].toLowerCase().indexOf(q) > -1 || e['game'].toLowerCase().indexOf(q) > -1) {
@@ -130,6 +128,7 @@ r.on('searchVideos', function() {
 		}
 	});
 	r.set('videos', sVideos);
+	ga('send', 'event', 'search videos', r.get('q')); // only send after videos have populated
 });
 
 r.on('goto', function(event, template) {
