@@ -3,7 +3,8 @@ var r = new Ractive({
 	template: '#page',
 	data: {
 		progress: 0,
-		page: 'highlights'
+		page: 'highlights',
+		q: ''
 	}
 });
 
@@ -128,7 +129,10 @@ r.on('searchVideos', function() {
 		}
 	});
 	r.set('videos', sVideos);
-	ga('send', 'event', 'search videos', r.get('q')); // only send after videos have populated
+	clearTimeout(r.get('searchVideosGA'));
+	r.set('searchVideosGA', setTimeout(function() {
+		ga('send', 'event', 'search videos', r.get('q')); // only send after videos have populated
+	}, 1000));
 });
 
 r.on('goto', function(event, template) {
