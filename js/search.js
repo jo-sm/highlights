@@ -285,5 +285,5 @@ function retrieveVideos(broadcaster, offset, limit, videos, q) {
 // Returns a promise to an object
 
 function getVideoJSON(broadcaster, offset, limit) {
-	return $.getJSON('https://api.twitch.tv/kraken/channels/' + broadcaster + '/videos?limit=' + limit + '&offset=' + offset + '&broadcasts=false').promise();
+	return $.getJSON('https://api.twitch.tv/kraken/channels/' + broadcaster + '/videos?limit=' + limit + '&offset=' + offset + '&broadcasts=false&callback=?').promise();
 }
