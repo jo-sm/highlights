@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+	<title>Search Twitch Broadcaster Highlights</title>
+	<link href="css/normalize.css" rel="stylesheet" type="text/css">
+	<link href="css/foundation.min.css" rel="stylesheet" type="text/css">
+	<style type="text/css">
+		.container {
+		margin-top: 5px;
+			font-family: "HelveticaNeue-Condensed","ArialNarrow-Bold","Helvetica Neue",Helvetica,Arial,sans-serif;
+		}
+		h2 {
+			font-family: "HelveticaNeue-Condensed","ArialNarrow-Bold","Helvetica Neue",Helvetica,Arial,sans-serif;
+		}
+		td.description {
+			word-break: break-all;
+		}
+		#q {
+			width: 0%;
+			opacity: 0;
+		}
+		#results {
+			display: none;
+		}
+		table {
+			width: 100%;
+		}
+		#header {
+			height: 75px;
+		}
+		.sidebar {
+			float: left;
+			margin-left: 1%;
+			width: 19%;
+			margin-top: 10px;
+		}
+		.sidebar .sub-nav {
+			width: 100%;
+		}
+		.main {
+			float: left;
+			width: 80%;
+		}
+	</style>
+</head>
+	<body>
+		<div id='container' class="container"></div>
+		<script id='page' type='text/ractive'>
+			<div class="sidebar">
+				<dl class="sub-nav">
+					<dd><a href="#highlights" on-click='goto:highlights'>Highlights</a></dd>
+					<dd><a href="#changelog" on-click='goto:changelog'>Changelog</a></dd>
+				</dl>
+				<strong>Bugs? Issues?</strong> Send me (<strong>Umperios</strong>) a message on Twitch!
+			</div>
+			<div class="main">
+				<div class="page" id="highlights">
+					<div class="row">
+						<div id="header" class="panel large-12 columns radius success">
+							<h2 class="text-center">Search through {{#broadcaster}}{{broadcaster}}{{/broadcaster}}{{^broadcaster}}a broadcaster{{/broadcaster}}'s highlights!</h2>
+						</div>
+					</div>
+					<form>
+						<div class="row">
+							<div class="large-{{a ? 6 : 12}} columns">
+								<div id="broadcaster">
+								<input type="text" class="radius {{#error}} error{{/error}} "name="broadcaster" value={{broadcaster}} placeholder="FrankerZ" on-change='searchBroadcasters'>
+								{{#error}}
+								<small class="error">{{error}}</small>
+								{{/error}}
+								</div>
+							</div>
+							{{#validBroadcaster}}
+							<div class="large-6 columns">
+								<div id="progress_bar" class="progress success radius">
+									<div class="meter" style="width: {{progress}}"></div>
+								</div>
+							</div>
+							{{#yesVideos}}
+							<div class="large-6 columns">
+								<div id="q">
+									<input type="text" class="radius" name="q" value={{q}} placeholder="Video name" on-keyup='searchVideos'>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="large-12 columns" id="results">
+								<table class="radius">
+									<thead>
+										<tr>
+											<th>Title</th>
+											<th>Description</th>
+											<th>Game</th>
+											<th>Length</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{#videos:v}}
+											<tr>
+												<td><a href="{{link}}">{{title}}</a></td>
+												<td class="description">{{description}}</td>
+												<td>{{game}}</td>
+												<td>{{length}}</td>
+											</tr>
+										{{/videos}}
+									</tbody>
+								</table>
+							</div>
+						{{/yesVideos}}
+						</div>
+						{{/validBroadcaster}}
+					</form>
+				</div>
+				<div class="page" id="changelog">
+					<div class="row">
+						<div class="large-12 columns">
+							<h2 class="text-center">Changelog</h2>
+							<hr>
+						</div>
+					</div>
+					<div class="row">
+						<div class="large-3 columns">
+							<h4>15 June 2014</h4>
+						</div>
+						<div class="large-9 columns">
+							<ol>
+								<li>Added ability to search through a specific Twitch user's highlights
+									<ol>
+										<li>Ractive.js</li>
+										<li>Velocity.js</li>
+										<li>jQuery</li>
+										<li>Foundation by Zurb</li>
+									</ol>
+								</li>
+								<li>Added transitions between various states in application</li>
+								<li>Added transitions between highlights and changelog pages</li>
+								<li>Added changelog</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</script>
+
+    <script src="js/moment.min.js" type="text/javascript"></script>
+		<script src="js/jquery.min.js" type="text/javascript"></script>
+		<script src="js/jquery.velocity.min.js" type="text/javascript"></script>
+		<script src='http://cdn.ractivejs.org/latest/ractive.js'></script>
+		<script src="js/search.js" type="text/javascript"></script>
+	</body>
+</html>
