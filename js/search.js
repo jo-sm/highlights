@@ -8,6 +8,14 @@ var r = new Ractive({
 });
 
 $(function() {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-51958038-1', 'joshuasmock.github.io');
+    ga('send', 'pageview');
+	
 	$('form').on('submit', function(e) {
 		return false;
 	});
@@ -58,6 +66,9 @@ r.on('searchBroadcasters', function() {
 		r.set('error', 'Please enter a broadcaster username');
 		return;
 	}
+	
+	ga('send', 'event', 'search', r.get('broadcaster'));
+	
 	r.set('error', null);
 	r.set('searching', true);
 	r.set('logo', null)
@@ -111,6 +122,7 @@ r.on('searchVideos', function() {
 		return;
 	}
 	sVideos = []
+	ga('send', 'event', 'search videos', r.get('q'));
 	r.get('allVideos').forEach(function(e) {
 		q = r.get('q').toLowerCase();
 		if (e['title'].toLowerCase().indexOf(q) > -1 || e['description'].toLowerCase().indexOf(q) > -1 || e['game'].toLowerCase().indexOf(q) > -1) {
@@ -128,6 +140,7 @@ r.on('goto', function(event, template) {
 		});
 		$('#' + template).show();
 	} else {
+		ga('send', 'event', 'goto template', template);
 		$('.page[id!="' + template + '"]').each(function(i, e) {
 			$(e).css('z-index', 1).velocity("slideUp", {
 				duration: 500
