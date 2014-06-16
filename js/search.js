@@ -123,7 +123,9 @@ r.on('searchVideos', function() {
 	}
 	sVideos = []
 	r.get('allVideos').forEach(function(e) {
-		q = r.get('q').toLowerCase();
+		q = r.get('q');
+    if(typeof q == 'string')
+      q.toLowerCase();
 		if (e['title'].toLowerCase().indexOf(q) > -1 || e['description'].toLowerCase().indexOf(q) > -1 || e['game'].toLowerCase().indexOf(q) > -1) {
 			sVideos.push(e);
 		}
