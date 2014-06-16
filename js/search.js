@@ -67,7 +67,7 @@ r.on('searchBroadcasters', function() {
 	else
 		t = handleTransition('first');
 	t.done(function() {
-		$.getJSON('https://api.twitch.tv/kraken/channels/' + r.get('broadcaster') + '&callback=?').done(function(data) {
+		$.getJSON('https://api.twitch.tv/kraken/channels/' + r.get('broadcaster') + '/?callback=?').done(function(data) {
 			r.set({
 				'logo': data['logo'],
 				'validBroadcaster': true,
