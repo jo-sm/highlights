@@ -15,6 +15,8 @@ $(function() {
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-51958038-1', 'joshuasmock.github.io');
+    ga('require', 'linkid', 'linkid.js');
+    ga('require', 'displayfeatures');
     ga('send', 'pageview');
 	
 	$('form').on('submit', function(e) {
