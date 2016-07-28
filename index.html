@@ -46,46 +46,9 @@
 </head>
 	<body>
 		<div id='container' class="container"></div>
-    <script id='changelog' type='text/ractive'>
-			<div class="page" id="changelog">
-				<div class="row">
-					<div class="large-12 columns">
-						<h2 class="text-center">Changelog</h2>
-						<hr>
-					</div>
-				</div>
-				<div class="row">
-					<div class="large-3 columns">
-						<h4>15 June 2014</h4>
-					</div>
-					<div class="large-9 columns">
-						<ol>
-							<li>Added ability to search through a specific Twitch user's highlights
-								<ol>
-									<li>Ractive.js</li>
-									<li>Velocity.js</li>
-									<li>jQuery</li>
-									<li>Foundation by Zurb</li>
-								</ol>
-							</li>
-							<li>Added transitions between various states in application</li>
-							<li>Added transitions between highlights and changelog pages</li>
-							<li>Added changelog</li>
-						</ol>
-					</div>
-				</div>
-			</div>
-    </script>
 		<script id='page' type='text/ractive'>
 			<div class="row">
-      <div class="medium-3 columns sidebar">
-				<dl class="sub-nav">
-					<dd><a href="#highlights" on-click='goto:highlights'>Highlights</a></dd>
-					<dd><a href="#changelog" on-click='goto:changelog'>Changelog</a></dd>
-				</dl>
-				<strong>Bugs? Issues?</strong><a href="https://github.com/joshuasmock/highlights/issues">Open an issue</a> on Github!
-			</div>
-			<div class="medium-9 columns main">
+			<div class="medium-offset-2 medium-8 columns main">
 				<div class="page" id="highlights">
 					<div class="row">
 						<div id="header" class="panel large-12 columns radius success">
