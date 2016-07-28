@@ -9,10 +9,20 @@ var r = new Ractive({
 });
 
 $(function() {
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    /* jshint ignore:start */
+    (function(i,s,o,g,r,a,m){
+      i.GoogleAnalyticsObject = r;
+      i[r]=i[r] || function() {
+        (i[r].q=i[r].q||[]).push(arguments);
+      },
+      i[r].l = (1 * new Date());
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a,m);
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    /* jshint ignore:end */
 
     ga('create', 'UA-51958038-1', 'joshuasmock.github.io');
     ga('require', 'linkid', 'linkid.js');
@@ -22,8 +32,8 @@ $(function() {
 	$('form').on('submit', function(e) {
 		return false;
 	});
-	if (queryString['broadcaster']) {
-		r.set('broadcaster', queryString['broadcaster']);
+	if (queryString.broadcaster) {
+		r.set('broadcaster', queryString.broadcaster);
 		r.fire('searchBroadcasters');
 	}
 	r.fire('goto', 'start', r.get('page'));
@@ -65,7 +75,7 @@ $(function() {
 
 r.on('searchBroadcasters', function() {
 	r.set('progress', '0%');
-	if (r.get('broadcaster') == '') {
+	if (r.get('broadcaster') === '') {
 		r.set('error', 'Please enter a broadcaster username');
 		return;
 	}
@@ -73,16 +83,17 @@ r.on('searchBroadcasters', function() {
 	ga('send', 'event', 'search', r.get('broadcaster'));
 	r.set('error', null);
 	r.set('searching', true);
-	r.set('logo', null)
+	r.set('logo', null);
 	t = new $.Deferred();
-	if (r.get('a'))
+	if (r.get('a')) {
 		t = handleTransition('new');
-	else
+	} else {
 		t = handleTransition('first');
+  }
 	t.done(function() {
-		$.getJSON('https://api.twitch.tv/kraken/channels/' + r.get('broadcaster') + '/?callback=?').done(function(data) {
+		$.getJSON('https://api.twitch.tv/kraken/channels/' + r.get('broadcaster').toLowerCase() + '/?callback=?').done(function(data) {
 			r.set({
-				'logo': data['logo'],
+				'logo': data.logo,
 				'validBroadcaster': true,
 				'invalidBroadcaster': false,
 				'allVideos': null,
@@ -123,12 +134,12 @@ r.on('searchVideos', function() {
 		r.set('videos', r.get('allVideos'));
 		return;
 	}
-	sVideos = []
+	sVideos = [];
 	r.get('allVideos').forEach(function(e) {
 		q = r.get('q');
     if(typeof q == 'string')
       q.toLowerCase();
-		if (e['title'].toLowerCase().indexOf(q) > -1 || e['description'].toLowerCase().indexOf(q) > -1 || e['game'].toLowerCase().indexOf(q) > -1) {
+		if (e.title.toLowerCase().indexOf(q) > -1 || e.description.toLowerCase().indexOf(q) > -1 || e.game.toLowerCase().indexOf(q) > -1) {
 			sVideos.push(e);
 		}
 	});
@@ -151,14 +162,14 @@ r.on('goto', function(event, template) {
 		$('.page[id!="' + template + '"]').each(function(i, e) {
 			$(e).css('z-index', 1).velocity("slideUp", {
 				duration: 500
-			})
+			});
 		});
 		$('#' + template).css('z-index', 50).velocity("slideDown", {
 			duration: 500
 		});
 	}
 	$('.sub-nav dd').each(function(i, e) {
-		$(e).removeClass('active')
+		$(e).removeClass('active');
 	});
 	$('.sub-nav dd a[href="#' + template + '"]').parent().addClass('active');
 });
@@ -171,7 +182,7 @@ function handleTransition(name) {
 			a = $('#results').velocity('slideUp', {
 				duration: 1200,
 				display: 'none'
-			}).promise()
+			}).promise();
 			b = $('#q').velocity({
 				width: '0%'
 			}, {
@@ -183,8 +194,8 @@ function handleTransition(name) {
 				}, {
 					duration: 750,
 					display: 'block'
-				})
-			}).promise()
+				});
+			}).promise();
 			$.when(a, b).done(function() {
 				t.resolve();
 			});
@@ -202,7 +213,7 @@ function handleTransition(name) {
 					display: 'block'
 				}).promise().done(function() {
 					t.resolve();
-				})
+				});
 			});
 			break;
 		case 'error':
@@ -221,12 +232,12 @@ function handleTransition(name) {
 				}, {
 					duration: 600,
 					display: 'block'
-				})
-			}).promise()
+				});
+			}).promise();
 			b = $('#results').velocity("slideDown", {
 				duration: r.get('allVideos').length * 15,
 				display: 'block'
-			}).promise()
+			}).promise();
 			$.when(a, b).done(function() {
 				t.resolve();
 			});
@@ -240,11 +251,11 @@ function parseSecs(secs) {
 	var minutes = parseInt(secs / 60) % 60;
 	var seconds = secs % 60;
 
-	return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+  return [hours, minutes, seconds].join(':');
 }
 
 // http://stackoverflow.com/questions/979975/how-to-get-the-value-from-url-parameter
-var queryString = function() {
+var queryString = (function() {
 	// This function is anonymous, is executed immediately and 
 	// the return value is assigned to QueryString!
 	var query_string = {};
@@ -265,35 +276,43 @@ var queryString = function() {
 		}
 	}
 	return query_string;
-}();
+})();
 
 function retrieveVideos(broadcaster, offset, limit, videos, q) {
 	videos = typeof videos == 'undefined' ? [] : videos;
 	q = typeof q == 'undefined' ? new $.Deferred() : q;
 	getVideoJSON(broadcaster, offset, limit).done(function(data) {
 
-		q.notify((offset + limit) / (Math.ceil(data['_total'] / 100) * 100) * 100);
+		q.notify((offset + limit) / (Math.ceil(data._total / 100) * 100) * 100);
 
-		if (data['videos'].length == 0 && offset == 0) {
+		if (data.videos.length === 0 && offset === 0) {
 			q.resolve(videos);
-		} else if (data['videos'].length == 0) {
+		} else if (data.videos.length === 0) {
 			q.resolve(videos);
 		}
-		data['videos'].forEach(function(e) {
+		data.videos.forEach(function(e) {
 			// Twitch may return nothing for certain values, so cast them to string
-			e['title'] == null ? e['title'] = '' : ''
-			e['description'] == null ? e['description'] = '' : ''
-			e['game'] == null ? e['game'] = '' : ''
+      if (e.title === null) {
+        e.title = '';
+      }
+
+      if (e.description === null) {
+        e.description = '';
+      }
+
+      if (e.game === null) {
+        e.game = '';
+      }
 			videos.push({
-				title: e['title'],
-				description: e['description'],
-				length: parseSecs(e['length']),
-				game: e['game'],
-				link: e['url']
+				title: e.title,
+				description: e.description,
+				length: parseSecs(e.length),
+				game: e.game,
+				link: e.url
 			});
 		});
 		offset += limit;
-		if (data['videos'].length < limit) {
+		if (data.videos.length < limit) {
 			q.resolve(videos);
 		} else {
 			retrieveVideos(broadcaster, offset, limit, videos, q);
